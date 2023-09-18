@@ -1,26 +1,52 @@
 DO
 $$
 DECLARE
-	i INT;
-	j INT;
+	nota INT;
+	media NUMERIC(10, 2) := 0;
+	contador INT := 0;
 BEGIN
-	i := 0;
-	<<externo>>
-	LOOP
-		i := i + 1;
-		EXIT WHEN i > 10;
-		j := 1;
-		<<interno>>
-		LOOP
-			RAISE NOTICE '% %', i, j;
-			j := j + 1;
-			EXIT WHEN j > 10;
-			-- j vai contar até 5, o loop interno vai ser interrompido e prosseguimos para a próxima iteração do loop externo
-			CONTINUE externo WHEN j > 5;
-		END LOOP;
+	-- inicialmente, valores de 0 a 11
+	-- com o -1, temos valores de -1 a 10
+	SELECT valor_aleatorio_entre (0, 11) - 1 INTO nota;
+	WHILE nota >= 0 LOOP
+		RAISE NOTICE '%', nota;
+		media := media + nota;
+		contador := contador + 1;
+		SELECT valor_aleatorio_entre (0, 11) - 1 INTO nota;
 	END LOOP;
+	IF contador > 0 THEN
+		RAISE NOTICE 'Média %.', media / contador;
+	ELSE
+		RAISE NOTICE 'Nenhuma nota gerada.';
+	END IF;
 END;
 $$
+
+
+
+-- DO
+-- $$
+-- DECLARE
+-- 	i INT;
+-- 	j INT;
+-- BEGIN
+-- 	i := 0;
+-- 	<<externo>>
+-- 	LOOP
+-- 		i := i + 1;
+-- 		EXIT WHEN i > 10;
+-- 		j := 1;
+-- 		<<interno>>
+-- 		LOOP
+-- 			RAISE NOTICE '% %', i, j;
+-- 			j := j + 1;
+-- 			EXIT WHEN j > 10;
+-- 			-- j vai contar até 5, o loop interno vai ser interrompido e prosseguimos para a próxima iteração do loop externo
+-- 			CONTINUE externo WHEN j > 5;
+-- 		END LOOP;
+-- 	END LOOP;
+-- END;
+-- $$
 
 
 
