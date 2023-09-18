@@ -1,26 +1,99 @@
+--criando a tabela
+CREATE TABLE tb_aluno (
+	cod_aluno SERIAL PRIMARY KEY,
+	nota INT
+);
+-- gerando dez notas e inserindo na tabela
+DO
+$$
+BEGIN
+---geramos notas para 10 alunos
+FOR i in 1..10 LOOP
+INSERT INTO tb_aluno (nota) VALUES (valor_aleatorio_entre(0, 10));
+END LOOP;
+END;
+$$
+--verificando se tudo deu certo até agora
+SELECT * FROM tb_aluno;
+--calculando a média com um FOR
 DO
 $$
 DECLARE
-	nota INT;
-	media NUMERIC(10, 2) := 0;
-	contador INT := 0;
+aluno RECORD;
+media NUMERIC(10, 2) := 0;
+total INT;
 BEGIN
-	-- inicialmente, valores de 0 a 11
-	-- com o -1, temos valores de -1 a 10
-	SELECT valor_aleatorio_entre (0, 11) - 1 INTO nota;
-	WHILE nota >= 0 LOOP
-		RAISE NOTICE '%', nota;
-		media := media + nota;
-		contador := contador + 1;
-		SELECT valor_aleatorio_entre (0, 11) - 1 INTO nota;
-	END LOOP;
-	IF contador > 0 THEN
-		RAISE NOTICE 'Média %.', media / contador;
-	ELSE
-		RAISE NOTICE 'Nenhuma nota gerada.';
-	END IF;
+FOR aluno IN
+SELECT * FROM tb_aluno
+LOOP
+RAISE NOTICE 'Nota: %', aluno.nota;
+media := media + aluno.nota;
+END LOOP;
+SELECT COUNT(*) FROM tb_aluno INTO total;
+RAISE NOTICE 'Média: %', media / total;
 END;
 $$
+
+
+
+-- DO
+-- $$
+-- BEGIN
+-- 	--repare como não precisamos declarar a variável i
+-- 	-- de 1 a 10, pulando de um em um
+-- 	RAISE NOTICE 'de 1 a 10, pulando de um em um';
+-- 	FOR i IN 1..10 LOOP
+-- 		RAISE NOTICE '%', i;
+-- 	END LOOP;
+-- 	-- E agora? -- não mostra nada
+-- 	RAISE NOTICE 'E agora?';
+-- 	FOR i IN 10..1 LOOP
+-- 		RAISE NOTICE '%', i;
+-- 	END LOOP;
+-- 	-- de 10 a 1, pulando de um em um
+-- 	--repare que, usando reverse, é preciso escrever 10..1 em vez de 1..10.
+-- 	RAISE NOTICE 'de 10 a 1, pulando de um em um';
+-- 	FOR i IN REVERSE 10..1 LOOP
+-- 		RAISE NOTICE '%', i;
+-- 	END LOOP;
+-- 	-- de 1 a 50, pulando de dois em dois
+-- 	RAISE NOTICE 'de 1 a 50, pulando de dois em dois';
+-- 	FOR i IN 1..50 BY 2 LOOP
+-- 		RAISE NOTICE '%', i;
+-- 	END LOOP;
+-- 	-- de 50 a 1, pulando de dois em dois
+-- 	RAISE NOTICE 'de 50 a 1, pulando de dois em dois';
+-- 	FOR i IN REVERSE 50..1 BY 2 LOOP
+-- 		RAISE NOTICE '%', i;
+-- 	END LOOP;
+-- END;
+-- $$
+
+
+
+-- DO
+-- $$
+-- DECLARE
+-- 	nota INT;
+-- 	media NUMERIC(10, 2) := 0;
+-- 	contador INT := 0;
+-- BEGIN
+-- 	-- inicialmente, valores de 0 a 11
+-- 	-- com o -1, temos valores de -1 a 10
+-- 	SELECT valor_aleatorio_entre (0, 11) - 1 INTO nota;
+-- 	WHILE nota >= 0 LOOP
+-- 		RAISE NOTICE '%', nota;
+-- 		media := media + nota;
+-- 		contador := contador + 1;
+-- 		SELECT valor_aleatorio_entre (0, 11) - 1 INTO nota;
+-- 	END LOOP;
+-- 	IF contador > 0 THEN
+-- 		RAISE NOTICE 'Média %.', media / contador;
+-- 	ELSE
+-- 		RAISE NOTICE 'Nenhuma nota gerada.';
+-- 	END IF;
+-- END;
+-- $$
 
 
 
