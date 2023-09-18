@@ -1,17 +1,42 @@
-- Contando de 1 a 10
--- Saída com EXIT/WHEN
 DO
 $$
 DECLARE
-	contador INT := 1;
+	contador INT := 0;
 BEGIN
 	LOOP
-	RAISE NOTICE '%', contador;
-	contador := contador + 1;
-	EXIT WHEN contador > 10;
+		contador := contador + 1;
+		EXIT WHEN contador > 100;
+		-- ignorando iteração da vez quando contador for múltiplo de 7 com
+--IF/CONTINUE
+		IF contador % 7 = 0 THEN
+			CONTINUE;
+		END IF;
+		--ignorando iteração da vez quando contador for múltiplo de 11 com
+--CONTINUE WHEN
+		CONTINUE WHEN contador % 11 = 0;
+		RAISE NOTICE '%', contador;
 	END LOOP;
 END;
 $$
+
+
+
+
+
+-- - Contando de 1 a 10
+-- -- Saída com EXIT/WHEN
+-- DO
+-- $$
+-- DECLARE
+-- 	contador INT := 1;
+-- BEGIN
+-- 	LOOP
+-- 	RAISE NOTICE '%', contador;
+-- 	contador := contador + 1;
+-- 	EXIT WHEN contador > 10;
+-- 	END LOOP;
+-- END;
+-- $$
 
 
 
