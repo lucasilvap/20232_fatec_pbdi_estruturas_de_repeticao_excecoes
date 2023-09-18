@@ -1,38 +1,63 @@
---criando a tabela
-CREATE TABLE tb_aluno (
-	cod_aluno SERIAL PRIMARY KEY,
-	nota INT
-);
--- gerando dez notas e inserindo na tabela
-DO
-$$
-BEGIN
----geramos notas para 10 alunos
-FOR i in 1..10 LOOP
-INSERT INTO tb_aluno (nota) VALUES (valor_aleatorio_entre(0, 10));
-END LOOP;
-END;
-$$
---verificando se tudo deu certo até agora
-SELECT * FROM tb_aluno;
---calculando a média com um FOR
 DO
 $$
 DECLARE
-aluno RECORD;
-media NUMERIC(10, 2) := 0;
-total INT;
+	valores INT[] := ARRAY[
+		valor_aleatorio_entre(1, 10),
+		valor_aleatorio_entre(1, 10),
+		valor_aleatorio_entre(1, 10),
+		valor_aleatorio_entre(1, 10),
+		valor_aleatorio_entre(1, 10)
+	];
+	valor INT;
+	soma INT := 0;
 BEGIN
-FOR aluno IN
-SELECT * FROM tb_aluno
-LOOP
-RAISE NOTICE 'Nota: %', aluno.nota;
-media := media + aluno.nota;
-END LOOP;
-SELECT COUNT(*) FROM tb_aluno INTO total;
-RAISE NOTICE 'Média: %', media / total;
+	FOREACH valor IN ARRAY valores LOOP
+		RAISE NOTICE 'Valor da vez: %', valor;
+		soma := soma + valor;
+	END LOOP;
+	RAISE NOTICE 'Soma: %', soma;
 END;
 $$
+
+
+
+
+
+-- --criando a tabela
+-- CREATE TABLE tb_aluno (
+-- 	cod_aluno SERIAL PRIMARY KEY,
+-- 	nota INT
+-- );
+-- -- gerando dez notas e inserindo na tabela
+-- DO
+-- $$
+-- BEGIN
+-- ---geramos notas para 10 alunos
+-- FOR i in 1..10 LOOP
+-- INSERT INTO tb_aluno (nota) VALUES (valor_aleatorio_entre(0, 10));
+-- END LOOP;
+-- END;
+-- $$
+-- --verificando se tudo deu certo até agora
+-- SELECT * FROM tb_aluno;
+-- --calculando a média com um FOR
+-- DO
+-- $$
+-- DECLARE
+-- aluno RECORD;
+-- media NUMERIC(10, 2) := 0;
+-- total INT;
+-- BEGIN
+-- FOR aluno IN
+-- SELECT * FROM tb_aluno
+-- LOOP
+-- RAISE NOTICE 'Nota: %', aluno.nota;
+-- media := media + aluno.nota;
+-- END LOOP;
+-- SELECT COUNT(*) FROM tb_aluno INTO total;
+-- RAISE NOTICE 'Média: %', media / total;
+-- END;
+-- $$
 
 
 
